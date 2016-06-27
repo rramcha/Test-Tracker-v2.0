@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2016 by rramcha (http://jsbin.com/posoxu/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+   
+<style id="jsbin-css">
+html,body{
+  width:100%;
+  background:#ddd
+}
+.main{
+  width:960px;
+  margin:0 auto;
+}
+.panel{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color:#FFFFFF;
+  padding:20px;
+  width:42%;
+  display:inline-box;
+  min-height:550px
+}
+.inputbox{
+  margin:0;
+  padding:0;
+  border:0;
+  background-color: #ECECEC;
+  border-radius:7px;
+  height:25px;
+  padding:7px;
+  width:300px;
+  border:1px solid #ddd;
+  font-size:15px;
+}
+.submit{
+  border:0;
+  margin:0;
+  border-radius:5px;
+  height:40px;
+  width:100px;
+  font-size:15px;
+  color:#FFFFFF;
+  background-color:#434343; 
+    margin-top:20px;
+}
+#taskList{
+  display:block;
+list-style:none;
+  border: 3px solid #ECECEC;
+  padding:5px;
+  width:320px;
+  border-radius:5px;
+}
+
+.task{
+    width: 300px;
+    height: 25px;
+    line-height: 25px;
+    padding: 10px;
+
+}
+ .task:nth-child(odd) {
+   background-color: #ECECEC;
+}
+  
+  .task .name{
+       font-size: 16px;
+    font-weight: bold;
+    margin-right: 10px;
+    opacity: 0.8;
+    display: inline-block;
+    min-width: 100px;
+    max-width: 100px;
+  }
+  .task .date{
+    color:#5B5757;
+  }
+  .task .assigned{
+    float:right;
+    font-weight:400;
+  }
+  
+  
+  
+
+</style>
+</head>
+<body>
+  <div class='main'>
+    <div>
+      <h1 style="margin-bottom:0">Test Tracker</h2>
+       <h2 style="color:#5B5858">V 2.0</h2>
+    </div>
+    <div class='panel' style="float:left" submit="run validation()">
+         <Form method="POST" action="" name="myForm" id="taskForm" onsubmit="return createTask()">
+     <h3>Create a Task</h3>
+     <p class="title">Task Name</p>
+     <input name="name" class="inputbox" type="text" minLength="4" required >
+     <p class="title">Date</p>
+     <input name="date" id="taskDate" class="inputbox" type="date" required >
+    <p class="title">Assigned To</p>
+     <input name="assigned" class="inputbox" type="text" minLength="4" required >
+     <div>
+            <button type="submit" class="submit">Submit</button>
+     </div>
+
+   </Form>
+    </div>    
+ 
+
+  <div class='panel' style="float:right">
+    <div>
+      <h3 style="display:block">Existing Tasks</h3>
+    <ul id='taskList'></ul>
+    </div>
+    
+  </div>
+ </div>
+<script id="jsbin-javascript">
+var initialData=[
+                {"name": "Test Task #1", "date": "12/01/2012", "assigned": "John Doe" },
+                {"name": "Test Task #2", "date": "12/02/2012", "assigned": "John Doe" },
+                {"name": "Test Task #3", "date": "12/03/2012", "assigned": "John Doe" },
+                {"name": "Test Task #4", "date": "12/04/2012", "assigned": "John Doe" },
+                {"name": "Test Task #5", "date": "12/05/2012", "assigned": "John Doe" },
+                {"name": "Test Task #6", "date": "12/06/2012", "assigned": "John Doe" },
+                {"name": "Test Task #7", "date": "12/07/2012", "assigned": "John Doe" }
+]
+function createListElement({name,date,assigned}){
+const innerHTML=   `<span class="name">${name}</span><span class="date">${date}</span><span class="assigned">${assigned}</span>`
+const li=document.createElement('li');
+  li.innerHTML=innerHTML;
+  li.className="task";
+  return li;
+}
+
+
+const isArray=(object)=>{
+  return Object.prototype.toString.call(object)==="[object Array]"
+}
+const createElements=(data)=>{
+  let taskData=isArray(data) ? data :[data];
+  return taskData.reduce((fragment,item)=>{
+      fragment.appendChild(createListElement(item))
+      return fragment;
+  },document.createDocumentFragment())
+}
+const appendTasks=(data)=>{
+  document.getElementById('taskList').appendChild(createElements(data))
+}
+appendTasks(initialData)
+const getMinDate=()=>{
+var date=new Date();
+  return  date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+}
+const createTask=()=>{
+  const myForm=document.forms["myForm"];
+let{name,date,assigned}=myForm;
+appendTasks({
+ name:name.value,
+  date:date.value,
+  assigned:assigned.value
+})
+myForm.reset();
+return false;
+}
+</script>
+</body>
+</html>
